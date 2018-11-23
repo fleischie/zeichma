@@ -68,6 +68,26 @@ TODO: How to customize themes?
 
 ## Contributing
 
+Dependendies to build this project include:
+
+- [meson][mesonbuild]
+- [ninja][ninja]
+- [flex][flex]
+
+This project is build using [meson][mesonbuild], to generate the necessary
+build-related files run:
+
+```bash
+meson build
+```
+
+And to compile the files run:
+
+```bash
+cd build/
+ninja
+```
+
 I appreciate any contributions. Make sure that you are descriptive enough to
 reproduce your issue and kind enough when interacting with anybody in regards
 to this project.
@@ -95,6 +115,9 @@ This software is distributed under the terms of the Apache License Version 2.0
 (Apache-2.0). For details see [LICENSE](./LICENSE).
 
 
+[flex]: https://github.com/westes/flex
+[libreoffice/impress]: https://www.libreoffice.org/discover/impress/
+[mesonbuild]: http://mesonbuild.com/
+[ninja]: https://ninja-build.org/
 [suckless/sent]: https://tools.suckless.org/sent/
 [tajpure/vortex]: https://github.com/tajpure/vortex
-[libreoffice/impress]: https://www.libreoffice.org/discover/impress/

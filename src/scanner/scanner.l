@@ -22,7 +22,7 @@
 %x COMMENT
 
 %{
-#include "scanner.h"
+#include "scanner/scanner.h"
 %}
 
 %%
