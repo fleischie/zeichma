@@ -1,0 +1,45 @@
+/*
+ * vim: ft=zeichma ts=8 sts=8 sw=8 noexpandtab
+ */
+
+#	Heading
+	Text text
+
+=	Text text
+
+<	Line 1
+<	Line 2
+
+>	Line 3
+>	Line 4
+
+<	Line 5
+=	Line 6
+>	Line 7
+
+@	./image.gif
+
+	🥑
+
+-	Item 1
+-	Item 2
+-	Item 3
+
+`	int
+`	main (void)
+`	{
+`		return EXIT_SUCCESS;
+`	}
+
+	Line 3
+.
+	Line 4
+
+	#
+	.
+	<
+	=
+	>
+	@
+
+.
