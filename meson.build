@@ -11,6 +11,7 @@ project_test_sources = []
 inc = [include_directories('include')]
 
 subdir('include')
+subdir('third_party')
 subdir('src')
 
 deps = [
