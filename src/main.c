@@ -16,6 +16,7 @@
  */
 
 #include "scanner/scanner.h"
+#include "stb/stretchy_buffer.h"
 
 #include <stdlib.h>
 #include <stdio.h>
@@ -23,6 +24,9 @@
 int
 main (int argc, char **argv)
 {
+	int i;
+	int length;
+
 	if (argc > 1)
 	{
 		if (!(yyin = fopen(argv[1], "r")))
@@ -32,9 +36,23 @@ main (int argc, char **argv)
 		}
 	}
 
-	yylex();
+	slide_t **presentation;
+	slide_t *slide;
+
+	presentation = NULL;
+	yylex(&presentation);
 
 	printf("%s\n", "TODO: Start rendering.");
 
+	length = sb_count(presentation);
+	printf("Presentation is %d slides long.\n", length);
+
+	for (i = 0; i < length; i++)
+	{
+		slide = presentation[i];
+		printf("%s\n\n\n", slide->content);
+	}
+
+	sb_free(presentation);
 	return EXIT_SUCCESS;
 }

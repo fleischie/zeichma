@@ -47,7 +47,7 @@
 ^;.+\n                 /* comment */
 ^\.\n                  { current_type = CONTENT_SPACER;
                          append_to_slide(current_type, ""); }
-\n                     { add_slide(current_type, yylineno); }
+\n                     { add_slide(presentation, current_type, yylineno); }
 .                      { handle_unknown_char_error(yylineno, yytext); }
 
 <<EOF>>                { cleanup(); return 0; }

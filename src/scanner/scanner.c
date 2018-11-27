@@ -16,9 +16,13 @@
  */
 
 #include "scanner/scanner.h"
+#include "stb/stretchy_buffer.h"
 
 #include <stdlib.h>
 #include <stdio.h>
+#include <string.h>
+
+static char *current_slide = NULL;
 
 void
 handle_unknown_char_error (int lineno, char *text)
@@ -31,23 +35,57 @@ handle_unknown_char_error (int lineno, char *text)
 }
 
 void
-add_slide (content_type_t t, int lineno)
+add_slide (slide_t ***presentation, content_type_t t, int lineno)
 {
 	if (t != CONTENT_SPACER)
 	{
 		return;
 	}
 
-	printf("TODO: Flush content to slide and append (%d)\n", lineno);
+	int size;
+	char *tmp;
+	slide_t *new_slide;
+
+	size = strlen(current_slide) + 1;
+	new_slide = malloc(sizeof(slide_t));
+	tmp = malloc(size);
+
+	snprintf(tmp, size, "%s", current_slide);
+
+	new_slide->type = t;
+	new_slide->content = tmp;
+
+	sb_push(*presentation, new_slide);
+
+	// free slide from current content
+	current_slide = NULL;
+	free(current_slide);
 }
 
 void
 append_to_slide (content_type_t t, char *s)
 {
-	printf(
-		"TODO: Append content to current slide (%s) :: %s\n",
-		resolve_content_type(t),
-		s);
+	int size;
+	char *tmp;
+	char *separator;
+
+	if (current_slide == NULL)
+	{
+		size = strlen(s) + 2;
+		current_slide = malloc(size);
+		separator = "";
+	}
+	else
+	{
+		size = strlen(current_slide) + strlen(s) + 2;
+		current_slide = realloc(current_slide, size);
+		separator = "\n";
+	}
+
+	tmp = strdup(current_slide);
+	snprintf(current_slide, size, "%s%s%s", tmp, separator, s);
+
+	free(tmp);
 }
 
 char *

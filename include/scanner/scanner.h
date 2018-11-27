@@ -28,10 +28,16 @@
 #include <stdio.h>
 
 /* ========================================================================= */
+/* Definitions                                                               */
+/* ========================================================================= */
+
+/* allow parameters to be passed into the scanning call */
+#define YY_DECL int yylex(slide_t ***presentation)
+
+/* ========================================================================= */
 /* Externally defined properties                                             */
 /* ========================================================================= */
 extern FILE *yyin;
-extern int yylex (void);
 
 /* ========================================================================= */
 /* Data types                                                                */
@@ -86,7 +92,7 @@ void append_to_slide (content_type_t, char *);
  * \fn           add_slide
  * \brief        Push current slide to queue and create new slide
  */
-void add_slide (content_type_t, int);
+void add_slide (slide_t ***, content_type_t, int);
 
 /**
  * \fn           cleanup
