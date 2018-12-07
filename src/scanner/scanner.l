@@ -42,13 +42,21 @@
 <COMMENT>"*/"          { BEGIN INITIAL; }
 <COMMENT>([^*]|\en)+|. /* ignore everything in a comment */
 
-<SLIDE>.+              { append_to_slide(current_type, yytext); }
+<SLIDE>.+              { append_to_slide(
+                                 presentation,
+                                 current_type,
+                                 yytext,
+                                 yylineno); }
 <SLIDE>\n              { current_type = CONTENT_SPACER; BEGIN INITIAL; }
 
 ^;.+\n                 /* comment */
 ^\.\n                  { current_type = CONTENT_SPACER;
-                         append_to_slide(current_type, ""); }
-\n                     { add_slide(presentation, current_type, yylineno); }
+                         append_to_slide(
+                                 presentation,
+                                 current_type,
+                                 "",
+                                 yylineno); }
+\n                     { add_slide(presentation, current_type); }
 .                      { handle_unknown_char_error(yylineno, yytext); }
 
 <<EOF>>                { cleanup(); return 0; }

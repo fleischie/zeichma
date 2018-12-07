@@ -58,12 +58,21 @@ typedef enum {
 } content_type_t;
 
 /**
- * \typedef      slide_t
- * \brief        Struct of slide related data
+ * \typedef      content_t
+ * \brief        Individual, marked up items on a slide
  */
 typedef struct {
+	int line;
 	content_type_t type;
-	char *content;
+	char *value;
+} content_t;
+
+/**
+ * \typedef      slide_t
+ * \brief        Container for several content items
+ */
+typedef struct {
+	content_t *content;
 } slide_t;
 
 
@@ -83,16 +92,28 @@ void handle_unknown_char_error (int, char *);
 char *resolve_content_type (content_type_t);
 
 /**
- * \fn           append_to_slide
- * \brief        Append content to current slide
+ * \fn           initialize_presentation
+ * \brief        Prepare the presentation array to be usable
  */
-void append_to_slide (content_type_t, char *);
+void initialize_presentation (slide_t ***);
+
+/**
+ * \fn           free_presentation
+ * \brief        De-allocate the presentation space
+ */
+void free_presentation (slide_t ***);
+
+/**
+ * \fn           append_to_slide
+ * \brief        Append content item to current slide
+ */
+void append_to_slide (slide_t ***, content_type_t, char *, int);
 
 /**
  * \fn           add_slide
- * \brief        Push current slide to queue and create new slide
+ * \brief        Append current slide to presentation container
  */
-void add_slide (slide_t ***, content_type_t, int);
+void add_slide (slide_t ***, content_type_t);
 
 /**
  * \fn           cleanup

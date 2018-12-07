@@ -24,9 +24,6 @@
 int
 main (int argc, char **argv)
 {
-	int i;
-	int length;
-
 	if (argc > 1)
 	{
 		if (!(yyin = fopen(argv[1], "r")))
@@ -36,10 +33,13 @@ main (int argc, char **argv)
 		}
 	}
 
+	int i, j;
+	int length;
+	int content_length;
 	slide_t **presentation;
-	slide_t *slide;
+	content_t *content;
 
-	presentation = NULL;
+	initialize_presentation(&presentation);
 	yylex(&presentation);
 
 	printf("%s\n", "TODO: Start rendering.");
@@ -49,10 +49,25 @@ main (int argc, char **argv)
 
 	for (i = 0; i < length; i++)
 	{
-		slide = presentation[i];
-		printf("%s\n\n\n", slide->content);
+		content = presentation[i]->content;
+		content_length = sb_count(content);
+
+		printf("Slide: %d (%d)\n$$$\n", i, content_length);
+
+		for (j = 0; j < content_length; j++)
+		{
+			printf(
+					"%4d | %d :: %s :: %s\n",
+					j,
+					content[j].line,
+					resolve_content_type(content[j].type),
+					content[j].value);
+		}
+
+		printf("%s\n", "$$$");
 	}
 
-	sb_free(presentation);
+	free_presentation(&presentation);
+
 	return EXIT_SUCCESS;
 }

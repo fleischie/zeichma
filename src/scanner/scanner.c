@@ -22,8 +22,6 @@
 #include <stdio.h>
 #include <string.h>
 
-static char *current_slide = NULL;
-
 void
 handle_unknown_char_error (int lineno, char *text)
 {
@@ -32,60 +30,6 @@ handle_unknown_char_error (int lineno, char *text)
 		"Encountered unknown character (%d): %s\n",
 		lineno,
 		text);
-}
-
-void
-add_slide (slide_t ***presentation, content_type_t t, int lineno)
-{
-	if (t != CONTENT_SPACER)
-	{
-		return;
-	}
-
-	int size;
-	char *tmp;
-	slide_t *new_slide;
-
-	size = strlen(current_slide) + 1;
-	new_slide = malloc(sizeof(slide_t));
-	tmp = malloc(size);
-
-	snprintf(tmp, size, "%s", current_slide);
-
-	new_slide->type = t;
-	new_slide->content = tmp;
-
-	sb_push(*presentation, new_slide);
-
-	// free slide from current content
-	current_slide = NULL;
-	free(current_slide);
-}
-
-void
-append_to_slide (content_type_t t, char *s)
-{
-	int size;
-	char *tmp;
-	char *separator;
-
-	if (current_slide == NULL)
-	{
-		size = strlen(s) + 2;
-		current_slide = malloc(size);
-		separator = "";
-	}
-	else
-	{
-		size = strlen(current_slide) + strlen(s) + 2;
-		current_slide = realloc(current_slide, size);
-		separator = "\n";
-	}
-
-	tmp = strdup(current_slide);
-	snprintf(current_slide, size, "%s%s%s", tmp, separator, s);
-
-	free(tmp);
 }
 
 char *
@@ -111,6 +55,74 @@ resolve_content_type (content_type_t t)
 	}
 
 	return "";
+}
+
+void
+initialize_presentation (slide_t ***presentation)
+{
+	slide_t *slide;
+
+	*presentation = NULL;
+
+	slide = malloc(sizeof(slide_t *));
+	slide->content = NULL;
+
+	sb_push(*presentation, slide);
+}
+
+void
+free_presentation (slide_t ***presentation)
+{
+	int i, length;
+	slide_t *slide;
+
+	length = sb_count(*presentation);
+	for (i = length - 1; i >= 0; i--)
+	{
+		slide = (*presentation)[i];
+
+		sb_free(slide->content);
+		slide->content = NULL;
+
+		free(slide);
+		slide = NULL;
+	}
+
+	sb_free(*presentation);
+}
+
+void
+add_slide (slide_t ***presentation, content_type_t t)
+{
+	if (t != CONTENT_SPACER)
+	{
+		return;
+	}
+
+	slide_t *new_slide;
+	new_slide = malloc(sizeof(slide_t));
+	new_slide->content = NULL;
+
+	sb_push(*presentation, new_slide);
+}
+
+void
+append_to_slide (
+		slide_t ***presentation,
+		content_type_t t,
+		char *s,
+		int lineno)
+{
+	slide_t *slide;
+	content_t current_item;
+
+	current_item.type = t;
+	current_item.value = strdup(s);
+	current_item.line = lineno;
+
+	slide = sb_last(*presentation);
+
+	sb_push(slide->content, current_item);
 }
 
 void
