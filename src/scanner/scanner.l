@@ -17,6 +17,7 @@
 %option nodefault
 %option noyywrap
 %option yylineno
+%option never-interactive
 
 %x SLIDE
 %x COMMENT
