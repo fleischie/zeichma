@@ -1,4 +1,4 @@
-# Presentation Tool
+# zeichma - A presentation tool
 
 Takahashi based slide render and presentation software.
 
@@ -18,8 +18,6 @@ Takahashi based slide render and presentation software.
 ## Features
 
 ### Syntax
-
-See [example](./example) for a complete example file.
 
 - Each paragraph is one slide.
 - The content of a slide is denoted by a tab (`\t`).
